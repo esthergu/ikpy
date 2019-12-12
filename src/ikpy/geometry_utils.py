@@ -106,6 +106,7 @@ def to_transformation_matrix(translation, orientation_matrix=np.zeros((3, 3))):
 
     matrix[:-1, :-1] = orientation_matrix
     matrix[:-1, -1] = translation
+
     return matrix
 
 

@@ -10,7 +10,6 @@ from . import URDF_utils
 from . import inverse_kinematics as ik
 from . import link as link_lib
 
-
 class Chain(object):
     """The base Chain class
 
@@ -135,7 +134,7 @@ class Chain(object):
             plot_utils.show_figure()
 
     @classmethod
-    def from_urdf_file(cls, urdf_file, base_elements=None, last_link_vector=None, base_element_type="link", active_links_mask=None, name="chain"):
+    def from_urdf_file(cls, urdf_file, base_elements=None, last_link_vector=None, base_pos=None, base_orient=None, base_element_type="link", active_links_mask=None, name="chain"):
         """Creates a chain from an URDF file
 
         Parameters
@@ -163,7 +162,7 @@ class Chain(object):
         if base_elements is None:
             base_elements = ["base_link"]
 
-        links = URDF_utils.get_urdf_parameters(urdf_file, base_elements=base_elements, last_link_vector=last_link_vector, base_element_type=base_element_type)
+        links = URDF_utils.get_urdf_parameters(urdf_file, base_pos=base_pos, base_orient=base_orient, base_elements=base_elements, last_link_vector=last_link_vector, base_element_type=base_element_type)
         # Add an origin link at the beginning
         return cls([link_lib.OriginLink()] + links, active_links_mask=active_links_mask, name=name)
 

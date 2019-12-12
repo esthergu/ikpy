@@ -8,7 +8,8 @@ This module contains helper functions used to parse URDF.
 import xml.etree.ElementTree as ET
 import json
 import numpy as np
-import itertools
+# import itertools
+# import pybullet as p
 
 # Ikpy imports
 from . import link as lib_link
@@ -105,7 +106,7 @@ def get_chain_from_joints(urdf_file, joints):
     return chain
 
 
-def get_urdf_parameters(urdf_file, base_elements=None, last_link_vector=None, base_element_type="link"):
+def get_urdf_parameters(urdf_file, base_pos=[0, 1, 0], base_orient=[0, 0, 0, 1], base_elements=None, last_link_vector=None, base_element_type="link"):
     """
     Returns translated parameters from the given URDF file.
     Parse the URDF joints into IKPY links, throw away the URDF links.
@@ -174,6 +175,7 @@ def get_urdf_parameters(urdf_file, base_elements=None, last_link_vector=None, ba
     parameters = []
 
     # Save the joints in the good format
+    first = True
     for joint in joints:
         translation = [0, 0, 0]
         orientation = [0, 0, 0]
@@ -186,6 +188,15 @@ def get_urdf_parameters(urdf_file, base_elements=None, last_link_vector=None, ba
                 translation = [float(x) for x in origin.attrib["xyz"].split()]
             if origin.attrib["rpy"]:
                 orientation = [float(x) for x in origin.attrib["rpy"].split()]
+
+        if first:
+            translation = base_pos
+            orientation = base_orient
+            first = False
+
+        print("ikpy debug")
+        print(translation)
+        print(orientation)
 
         axis = joint.find("axis")
         if axis is not None:
